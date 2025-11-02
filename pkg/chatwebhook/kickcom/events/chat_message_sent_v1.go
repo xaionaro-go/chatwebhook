@@ -16,13 +16,13 @@ const (
 )
 
 type ChatMessageSentV1 struct {
-	MessageID   string               `json:"message_id"`
-	RepliesTo   *structs.RepliesToV1 `json:"replies_to"`
-	Broadcaster structs.UserV1       `json:"broadcaster"`
-	Sender      structs.UserV1       `json:"sender"`
-	Content     string               `json:"content"`
-	Emotes      []structs.EmoteV1    `json:"emotes"`
-	CreatedAt   string               `json:"created_at"`
+	MessageID   string                `json:"message_id"`
+	RepliesTo   *structs.RepliesToV1  `json:"replies_to"`
+	Broadcaster structs.UserV1        `json:"broadcaster"`
+	Sender      structs.UserV1        `json:"sender"`
+	Content     string                `json:"content"`
+	Emotes      []structs.EmoteV1     `json:"emotes"`
+	CreatedAt   structs.RFC3339String `json:"created_at"`
 }
 
 func (ChatMessageSentV1) Version() int {

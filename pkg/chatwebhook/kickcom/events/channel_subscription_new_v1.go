@@ -6,11 +6,11 @@ import (
 )
 
 type ChannelSubscriptionNewV1 struct {
-	Broadcaster structs.UserV1 `json:"broadcaster"`
-	Subscriber  structs.UserV1 `json:"subscriber"`
-	Duration    int64          `json:"duration"`
-	CreatedAt   string         `json:"created_at"`
-	ExpiresAt   string         `json:"expires_at"`
+	Broadcaster structs.UserV1        `json:"broadcaster"`
+	Subscriber  structs.UserV1        `json:"subscriber"`
+	Duration    int64                 `json:"duration"`
+	CreatedAt   structs.RFC3339String `json:"created_at"`
+	ExpiresAt   structs.RFC3339String `json:"expires_at"`
 }
 
 func (ChannelSubscriptionNewV1) Version() int {

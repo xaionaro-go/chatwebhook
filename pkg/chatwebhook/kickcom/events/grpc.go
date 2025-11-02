@@ -2,7 +2,6 @@ package events
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/google/uuid"
 	"github.com/xaionaro-go/chatwebhook/pkg/chatwebhook/kickcom/structs"
@@ -21,6 +20,6 @@ func userToGRPC(u structs.UserV1) *chatwebhook_grpc.User {
 	}
 }
 
-func timeToGRPC(timeStr string) uint64 {
-	return uint64(must(time.Parse(structs.TimeLayout, timeStr)).UnixNano())
+func timeToGRPC(timeStr structs.RFC3339String) uint64 {
+	return uint64(must(timeStr.Parse()).UnixNano())
 }

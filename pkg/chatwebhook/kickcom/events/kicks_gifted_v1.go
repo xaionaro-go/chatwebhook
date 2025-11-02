@@ -8,10 +8,10 @@ import (
 )
 
 type KicksGifted struct {
-	Broadcaster structs.UserV1 `json:"broadcaster"`
-	Sender      structs.UserV1 `json:"sender"`
-	Gift        structs.GiftV1 `json:"gift"`
-	CreatedAt   string         `json:"created_at"`
+	Broadcaster structs.UserV1        `json:"broadcaster"`
+	Sender      structs.UserV1        `json:"sender"`
+	Gift        structs.GiftV1        `json:"gift"`
+	CreatedAt   structs.RFC3339String `json:"created_at"`
 }
 
 func (KicksGifted) Version() int {
