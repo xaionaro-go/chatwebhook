@@ -50,6 +50,7 @@ enum Currency {
     CURRENCY_EUR = 2;
     CURRENCY_GBP = 3;
     CURRENCY_JPY = 4;
+    CURRENCY_TWITCH_BITS = 1024;
     CURRENCY_OTHER = 65535;
 }
 
