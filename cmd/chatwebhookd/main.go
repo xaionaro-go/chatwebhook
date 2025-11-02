@@ -1,9 +1,11 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"flag"
 	"fmt"
+	"io"
 	"net"
 	"net/http"
 	"os"
@@ -54,7 +56,7 @@ func main() {
 	noTLSFlag := flag.Bool("no-tls", false, "Disable TLS for the receiver")
 	certPath := flag.String("cert", "/etc/chatwebhook/server.crt", "Path to TLS certificate")
 	keyPath := flag.String("key", "/etc/chatwebhook/server.key", "Path to TLS key")
-	cacheDirFlag := flag.String("cache-dir", "~/.local/cache/chatwebhook", "Path to cache directory")
+	cacheDirFlag := flag.String("cache-dir", "~/.cache/chatwebhook", "Path to cache directory")
 	flag.Parse()
 	l := zap.Default().WithLevel(loggerLevel)
 	ctx := context.Background()
@@ -86,16 +88,31 @@ func main() {
 
 	observability.Go(ctx, func(ctx context.Context) {
 		mux := http.NewServeMux()
-		mux.HandleFunc("/", h.GetPublishFunc(kickcom.ID))
-		/*mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-			if logger.FromCtx(r.Context()).Level() >= logger.LevelTrace {
-				body := make([]byte, r.ContentLength)
-				n, _ := r.Body.Read(body)
-				body = body[:n]
-				logger.Tracef(r.Context(), "unknown route: %s %s; body: <%s>", r.Method, r.URL.Path, string(body))
+		mux.HandleFunc("/kick", h.GetPublishFunc(kickcom.ID))
+		mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			ctx := r.Context()
+			body, err := io.ReadAll(r.Body)
+			if err != nil {
+				http.Error(w, "unable to read request body: "+err.Error(), http.StatusBadRequest)
+				return
 			}
-			http.Error(w, "not found", http.StatusNotFound)
-		})*/
+			r.GetBody = func() (io.ReadCloser, error) {
+				return io.NopCloser(bytes.NewReader(body)), nil
+			}
+			if logger.FromCtx(ctx).Level() >= logger.LevelTrace {
+				logger.Tracef(ctx, ": %s %s; body: <%s>", r.Method, r.URL.Path, string(body))
+			}
+			switch {
+			case r.Header.Get(kickcom.HTTPHeaderEventSignature) != "":
+				// TODO: delete this eventually; currently kick.com ignores URI so we get all
+				//       the notifications to the root path, which is not what we want here;
+				//       but we have no other choice:
+				h.GetPublishFunc(kickcom.ID)(w, r)
+			default:
+				logger.Tracef(ctx, "a handler is not found: %s %s", r.Method, r.URL.Path)
+				http.Error(w, "not found", http.StatusNotFound)
+			}
+		})
 		srv := &http.Server{
 			Handler: mux,
 			BaseContext: func(net.Listener) context.Context {

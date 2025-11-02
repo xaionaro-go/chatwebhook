@@ -6,6 +6,7 @@ require (
 	github.com/facebookincubator/go-belt v0.0.0-20250308011339-62fb7027b11f
 	github.com/stretchr/testify v1.11.1
 	github.com/xaionaro-go/eventbus v0.0.0-20250720144534-4670758005d9
+	github.com/xaionaro-go/fcache v0.0.0-20251102183151-07b2f9deba74
 	github.com/xaionaro-go/observability v0.0.0-20251102143534-3aeb2a25e57d
 	github.com/xaionaro-go/secret v0.0.0-20250111141743-ced12e1082c2
 	github.com/xaionaro-go/xpath v0.0.0-20250111145115-55f5728f643f
@@ -18,8 +19,10 @@ require (
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
+	github.com/kr/pretty v0.3.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	golang.org/x/crypto v0.40.0 // indirect
+	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
@@ -31,7 +34,6 @@ require (
 	github.com/go-ng/xsort v0.0.0-20220617174223-1d146907bccc // indirect
 	github.com/google/uuid v1.6.0
 	github.com/huandu/go-tls v0.0.0-20200109070953-6f75fb441850 // indirect
-	github.com/icza/kvcache v0.0.0-20230330133025-f5eb6361aef6
 	github.com/klauspost/cpuid/v2 v2.2.7 // indirect
 	github.com/phuslu/goid v1.0.1 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect

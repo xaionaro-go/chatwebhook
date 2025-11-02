@@ -6,8 +6,8 @@ import (
 
 	"github.com/xaionaro-go/chatwebhook/pkg/chatwebhook"
 	"github.com/xaionaro-go/chatwebhook/pkg/grpc/protobuf/go/chatwebhook_grpc"
-	"github.com/xaionaro-go/xgrpc"
 	"github.com/xaionaro-go/secret"
+	"github.com/xaionaro-go/xgrpc"
 	"google.golang.org/grpc"
 )
 

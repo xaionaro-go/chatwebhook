@@ -2,17 +2,16 @@ package cachedir
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"time"
 
 	"github.com/facebookincubator/go-belt/tool/logger"
-	"github.com/icza/kvcache"
 	"github.com/xaionaro-go/chatwebhook/pkg/cache"
+	"github.com/xaionaro-go/fcache"
 )
 
 type CacheDir struct {
-	Backend kvcache.Cache
+	Backend fcache.Cache[fcache.String, fcache.Bytes32]
 }
 
 var _ cache.Cache = (*CacheDir)(nil)
@@ -20,7 +19,7 @@ var _ cache.Cache = (*CacheDir)(nil)
 func New(
 	path string,
 ) (*CacheDir, error) {
-	backend, err := kvcache.New(path, "")
+	backend, err := fcache.Builder[fcache.String](path, 16*fcache.MiB).Build()
 	if err != nil {
 		return nil, fmt.Errorf("unable to initialize cache dir backend: %w", err)
 	}
@@ -29,32 +28,19 @@ func New(
 	}, nil
 }
 
-type item struct {
-	UpdatedAt time.Time
-	Value     []byte
-}
-
 func (c *CacheDir) Get(
 	ctx context.Context,
 	key string,
 ) (value []byte, updatedAt time.Time) {
-	raw, err := c.Backend.Get(key)
+	value, info, err := c.Backend.Get(fcache.String(key))
 	if err != nil {
 		logger.Errorf(ctx, "unable to get cache item %q: %v", key, err)
 		return nil, time.Time{}
 	}
-	if raw == nil {
+	if value == nil {
 		return nil, time.Time{}
 	}
-
-	var i item
-	err = json.Unmarshal(raw, &i)
-	if err != nil {
-		logger.Errorf(ctx, "unable to unmarshal cache item %q: '%s': %v", key, raw, err)
-		return nil, time.Time{}
-	}
-
-	return i.Value, i.UpdatedAt
+	return value, info.Mtime
 }
 
 func (c *CacheDir) Set(
@@ -62,18 +48,7 @@ func (c *CacheDir) Set(
 	key string,
 	value []byte,
 ) {
-	i := item{
-		UpdatedAt: time.Now(),
-		Value:     value,
-	}
-
-	raw, err := json.Marshal(&i)
-	if err != nil {
-		logger.Errorf(ctx, "unable to marshal cache item %q: %v", key, err)
-		return
-	}
-
-	if err := c.Backend.Put(key, raw); err != nil {
+	if _, err := c.Backend.Put(fcache.String(key), value, 0); err != nil {
 		logger.Errorf(ctx, "unable to put cache item %q: %v", key, err)
 	}
 }

@@ -47,14 +47,30 @@ func (h *Handler) GetPublishFunc(
 ) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		body, err := io.ReadAll(r.Body)
+		if r.GetBody == nil {
+			body, err := io.ReadAll(r.Body)
+			if err != nil {
+				http.Error(w, "unable to read request body: "+err.Error(), http.StatusBadRequest)
+				return
+			}
+			r.GetBody = func() (io.ReadCloser, error) {
+				return io.NopCloser(bytes.NewReader(body)), nil
+			}
+		}
+
+		bodyReader, err := r.GetBody()
+		if err != nil {
+			http.Error(w, "unable to get request body: "+err.Error(), http.StatusBadRequest)
+			return
+		}
+		defer bodyReader.Close()
+
+		body, err := io.ReadAll(bodyReader)
 		if err != nil {
 			http.Error(w, "unable to read request body: "+err.Error(), http.StatusBadRequest)
 			return
 		}
-		r.GetBody = func() (io.ReadCloser, error) {
-			return io.NopCloser(bytes.NewReader(body)), nil
-		}
+
 		logger.Tracef(ctx, "handling webhook request for platform %s (body: %s)", platformID.String(), string(body))
 
 		apiKey := r.Form.Get("apiKey")
