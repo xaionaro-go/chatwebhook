@@ -54,7 +54,7 @@ func main() {
 			},
 			&cli.StringFlag{
 				Name:  "server",
-				Value: "home.dx.center:8081",
+				Value: "home.dx.center:4531",
 				Usage: "Address of the chatwebhookd gRPC server",
 			},
 		},
