@@ -154,6 +154,7 @@ func (v *PubKeyVerifier) VerifyRequest(r *http.Request) error {
 	if err != nil {
 		return fmt.Errorf("unable to read request body: %w", err)
 	}
+	defer bodyReader.Close()
 
 	body, err := io.ReadAll(bodyReader)
 	if err != nil {

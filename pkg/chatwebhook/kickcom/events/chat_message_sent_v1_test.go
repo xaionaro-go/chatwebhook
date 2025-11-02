@@ -1,10 +1,10 @@
 package events
 
 import (
-	"reflect"
 	"testing"
 	"time"
 
+	"github.com/stretchr/testify/require"
 	"github.com/xaionaro-go/chatwebhook/pkg/chatwebhook/kickcom/structs"
 	"github.com/xaionaro-go/chatwebhook/pkg/grpc/protobuf/go/chatwebhook_grpc"
 )
@@ -20,6 +20,41 @@ func TestChatMessageSentV1_ToGRPC(t *testing.T) {
 	}{
 		{
 			name: "simple message without emotes",
+			ev: ChatMessageSentV1{
+				MessageID: "msg1",
+				Content:   "Hello, Hello!",
+				Sender: structs.UserV1{
+					UserID:   1,
+					Username: "testuser",
+				},
+				Broadcaster: structs.UserV1{
+					UserID:   2,
+					Username: "broadcaster",
+				},
+				CreatedAt: "2025-11-02T00:00:00Z",
+			},
+			want: []*chatwebhook_grpc.Event{
+				{
+					Id:                "msg1",
+					CreatedAtUNIXNano: uint64(time.Date(2025, time.November, 2, 0, 0, 0, 0, time.UTC).UnixNano()),
+					EventType:         chatwebhook_grpc.PlatformEventType_platformEventTypeChatMessage,
+					User: &chatwebhook_grpc.User{
+						Id:   "1",
+						Name: "testuser",
+					},
+					TargetChannel: &chatwebhook_grpc.User{
+						Id:   "2",
+						Name: "broadcaster",
+					},
+					Message: &chatwebhook_grpc.Message{
+						Content:    "Hello, Hello!",
+						FormatType: chatwebhook_grpc.TextFormatType_TEXT_FORMAT_TYPE_HTML,
+					},
+				},
+			},
+		},
+		{
+			name: "simple message with emotes",
 			ev: ChatMessageSentV1{
 				MessageID: "msg1",
 				Content:   "Hello.. [emote]; Hello!",
@@ -61,9 +96,7 @@ func TestChatMessageSentV1_ToGRPC(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := tt.ev.ToGRPC(); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("ChatMessageSentV1.ToGRPC() = %v, want %v", got, tt.want)
-			}
+			require.Equal(t, tt.want, tt.ev.ToGRPC())
 		})
 	}
 }

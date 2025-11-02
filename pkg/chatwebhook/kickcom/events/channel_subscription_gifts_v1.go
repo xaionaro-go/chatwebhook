@@ -25,7 +25,7 @@ func (ChannelSubscriptionGiftsV1) TypeID() chatwebhook_grpc.PlatformEventType {
 	return chatwebhook_grpc.PlatformEventType_platformEventTypeGiftedSubscription
 }
 
-func (e ChannelSubscriptionGiftsV1) ToGRPC() []*chatwebhook_grpc.Event {
+func (e *ChannelSubscriptionGiftsV1) ToGRPC() []*chatwebhook_grpc.Event {
 	result := make([]*chatwebhook_grpc.Event, 0, len(e.Giftees))
 	for _, giftee := range e.Giftees {
 		result = append(result, &chatwebhook_grpc.Event{

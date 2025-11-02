@@ -86,9 +86,25 @@ func main() {
 
 	observability.Go(ctx, func(ctx context.Context) {
 		mux := http.NewServeMux()
-		mux.HandleFunc("/kick", h.GetPublishFunc(kickcom.ID))
+		mux.HandleFunc("/", h.GetPublishFunc(kickcom.ID))
+		/*mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+			if logger.FromCtx(r.Context()).Level() >= logger.LevelTrace {
+				body := make([]byte, r.ContentLength)
+				n, _ := r.Body.Read(body)
+				body = body[:n]
+				logger.Tracef(r.Context(), "unknown route: %s %s; body: <%s>", r.Method, r.URL.Path, string(body))
+			}
+			http.Error(w, "not found", http.StatusNotFound)
+		})*/
 		srv := &http.Server{
 			Handler: mux,
+			BaseContext: func(net.Listener) context.Context {
+				return ctx
+			},
+			ConnContext: func(ctx context.Context, c net.Conn) context.Context {
+				logger.Tracef(ctx, "accepted connection from %s", c.RemoteAddr().String())
+				return ctx
+			},
 		}
 		if *noTLSFlag {
 			logger.Infof(ctx, "starting receiver HTTP server at %s without TLS", receiverListener.Addr())

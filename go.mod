@@ -4,8 +4,10 @@ go 1.24.2
 
 require (
 	github.com/facebookincubator/go-belt v0.0.0-20250308011339-62fb7027b11f
+	github.com/stretchr/testify v1.11.1
 	github.com/xaionaro-go/eventbus v0.0.0-20250720144534-4670758005d9
 	github.com/xaionaro-go/observability v0.0.0-20250622130956-24b7017284e4
+	github.com/xaionaro-go/secret v0.0.0-20250111141743-ced12e1082c2
 	github.com/xaionaro-go/xpath v0.0.0-20250111145115-55f5728f643f
 	github.com/xaionaro-go/xsync v0.0.0-20250111141039-3e7f31b1a2c6
 	google.golang.org/grpc v1.76.0
@@ -13,8 +15,12 @@ require (
 )
 
 require (
+	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/hashicorp/errwrap v1.0.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
+	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
+	golang.org/x/crypto v0.40.0 // indirect
+	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
 require (

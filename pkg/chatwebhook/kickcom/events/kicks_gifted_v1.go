@@ -26,7 +26,7 @@ func (KicksGifted) TypeID() chatwebhook_grpc.PlatformEventType {
 	return chatwebhook_grpc.PlatformEventType_platformEventTypeOther
 }
 
-func (ev KicksGifted) ToGRPC() []*chatwebhook_grpc.Event {
+func (ev *KicksGifted) ToGRPC() []*chatwebhook_grpc.Event {
 	return []*chatwebhook_grpc.Event{{
 		Id:                randomEventID(),
 		CreatedAtUNIXNano: timeToGRPC(ev.CreatedAt),

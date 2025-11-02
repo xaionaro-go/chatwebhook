@@ -25,7 +25,7 @@ func (ChannelSubscriptionNewV1) TypeID() chatwebhook_grpc.PlatformEventType {
 	return chatwebhook_grpc.PlatformEventType_platformEventTypeSubscriptionNew
 }
 
-func (e ChannelSubscriptionNewV1) ToGRPC() []*chatwebhook_grpc.Event {
+func (e *ChannelSubscriptionNewV1) ToGRPC() []*chatwebhook_grpc.Event {
 	return []*chatwebhook_grpc.Event{
 		{
 			Id:                randomEventID(),

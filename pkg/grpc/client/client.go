@@ -53,7 +53,6 @@ func (c *Client) GetCallWrapper() xgrpc.CallWrapperFunc {
 func (c *Client) GetMessagesChan(
 	ctx context.Context,
 	platformID chatwebhook_grpc.PlatformID,
-	channelID string,
 	apiKey string,
 ) (<-chan *chatwebhook_grpc.Event, error) {
 	return xgrpc.UnwrapChan(ctx, c,
@@ -65,7 +64,6 @@ func (c *Client) GetMessagesChan(
 				client.Subscribe,
 				&chatwebhook_grpc.SubscribeRequest{
 					PlatformID: platformID,
-					ChannelID:  channelID,
 					ApiKey:     apiKey,
 				},
 			)

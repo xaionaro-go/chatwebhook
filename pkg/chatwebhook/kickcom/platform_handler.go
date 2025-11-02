@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/facebookincubator/go-belt/tool/logger"
 	"github.com/xaionaro-go/chatwebhook/pkg/cache"
 	"github.com/xaionaro-go/chatwebhook/pkg/chatwebhook"
 	"github.com/xaionaro-go/chatwebhook/pkg/chatwebhook/kickcom/events"
@@ -38,7 +39,11 @@ func (h *PlatformHandler) PlatformID() chatwebhook_grpc.PlatformID {
 
 func (h *PlatformHandler) ParseEvents(
 	r *http.Request,
-) ([]*chatwebhook_grpc.Event, error) {
+) (_ret []*chatwebhook_grpc.Event, _err error) {
+	ctx := r.Context()
+	logger.Tracef(ctx, "ParseEvents")
+	defer func() { logger.Tracef(ctx, "/ParseEvents: %d events, err=%v", len(_ret), _err) }()
+
 	if err := h.PubKeyVerifier.VerifyRequest(r); err != nil {
 		return nil, fmt.Errorf("unable to verify kick.com request signature: %w", err)
 	}
@@ -63,15 +68,22 @@ func parseEvents(
 		return nil, fmt.Errorf("unable to parse %q header %q: %w", events.HTTPHeaderEventVersion, eventVersionStr, err)
 	}
 
-	data, err := io.ReadAll(r.Body)
+	bodyReader, err := r.GetBody()
+	if err != nil {
+		return nil, fmt.Errorf("unable to get request body reader: %w", err)
+	}
+	defer bodyReader.Close()
+
+	data, err := io.ReadAll(bodyReader)
 	if err != nil {
 		return nil, fmt.Errorf("unable to read request body: %w", err)
 	}
 
-	ev, err := events.AbstractParse(eventType, int(eventVersion), data)
+	events, err := events.AbstractParse(eventType, int(eventVersion), data)
 	if err != nil {
 		return nil, fmt.Errorf("unable to parse kick.com event: %w", err)
 	}
+	logger.Debugf(r.Context(), "parsed kick.com event: type=%q version=%d %+v", eventType, eventVersion, events)
 
-	return ev.ToGRPC(), nil
+	return events.ToGRPC(), nil
 }

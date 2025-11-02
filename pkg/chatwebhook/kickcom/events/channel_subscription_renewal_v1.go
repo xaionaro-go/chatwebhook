@@ -26,7 +26,7 @@ func (ChannelSubscriptionRenewalV1) TypeID() chatwebhook_grpc.PlatformEventType 
 	return chatwebhook_grpc.PlatformEventType_platformEventTypeSubscriptionRenewed
 }
 
-func (e ChannelSubscriptionRenewalV1) ToGRPC() []*chatwebhook_grpc.Event {
+func (e *ChannelSubscriptionRenewalV1) ToGRPC() []*chatwebhook_grpc.Event {
 	return []*chatwebhook_grpc.Event{
 		{
 			Id:                must(uuid.NewRandom()).String(),

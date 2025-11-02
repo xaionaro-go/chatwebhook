@@ -1,11 +1,15 @@
 package chatwebhook
 
 import (
+	"bytes"
 	"context"
+	"io"
 	"net/http"
 
+	"github.com/facebookincubator/go-belt/tool/logger"
 	"github.com/xaionaro-go/chatwebhook/pkg/grpc/protobuf/go/chatwebhook_grpc"
 	"github.com/xaionaro-go/eventbus"
+	"github.com/xaionaro-go/secret"
 	"github.com/xaionaro-go/xsync"
 )
 
@@ -43,24 +47,24 @@ func (h *Handler) GetPublishFunc(
 ) func(w http.ResponseWriter, r *http.Request) {
 	return func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-
-		channelID := r.Form.Get("channelID")
-		if channelID == "" {
-			http.Error(w, "channelID is required", http.StatusBadRequest)
+		body, err := io.ReadAll(r.Body)
+		if err != nil {
+			http.Error(w, "unable to read request body: "+err.Error(), http.StatusBadRequest)
 			return
 		}
+		r.GetBody = func() (io.ReadCloser, error) {
+			return io.NopCloser(bytes.NewReader(body)), nil
+		}
+		logger.Tracef(ctx, "handling webhook request for platform %s (body: %s)", platformID.String(), string(body))
 
 		apiKey := r.Form.Get("apiKey")
-		if apiKey == "" {
-			http.Error(w, "apiKey is required", http.StatusBadRequest)
-			return
-		}
-
 		platformHandler := h.GetPlatformHandler(platformID)
 		if platformHandler == nil {
 			http.Error(w, "unsupported platform", http.StatusBadRequest)
 			return
 		}
+
+		logger.Debugf(ctx, "received webhook request for platform %s", platformID.String())
 
 		events, err := platformHandler.ParseEvents(r)
 		if err != nil {
@@ -69,11 +73,12 @@ func (h *Handler) GetPublishFunc(
 		}
 
 		for _, event := range events {
-			eventbus.SendEventWithCustomTopic(ctx, h.EventBus, subKey{
+			subKey := subKey{
 				PlatformID: platformID,
-				ChannelID:  channelID,
 				APIKey:     apiKey,
-			}, event)
+			}
+			logger.Debugf(ctx, "publishing event %+v to subscribers of %s", event, platformID.String())
+			eventbus.SendEventWithCustomTopic(ctx, h.EventBus, subKey, event)
 		}
 		w.WriteHeader(http.StatusOK)
 	}
@@ -81,21 +86,18 @@ func (h *Handler) GetPublishFunc(
 
 type subKey struct {
 	PlatformID chatwebhook_grpc.PlatformID
-	ChannelID  string
 	APIKey     string
 }
 
 func (h *Handler) Subscribe(
 	ctx context.Context,
 	platformID chatwebhook_grpc.PlatformID,
-	channelID string,
-	apiKey string,
+	apiKey secret.String,
 ) (<-chan *chatwebhook_grpc.Event, error) {
 	return eventbus.SubscribeWithCustomTopic[subKey, *chatwebhook_grpc.Event](ctx,
 		h.EventBus, subKey{
 			PlatformID: platformID,
-			ChannelID:  channelID,
-			APIKey:     apiKey,
+			APIKey:     apiKey.Get(),
 		},
 	).EventChan(), nil
 }

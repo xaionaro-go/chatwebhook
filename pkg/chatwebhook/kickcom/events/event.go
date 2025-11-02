@@ -21,28 +21,31 @@ type Event interface {
 
 func All() []Event {
 	return []Event{
-		ChannelFollowedV1{},
-		ChannelSubscriptionGiftsV1{},
-		ChannelSubscriptionNewV1{},
-		ChannelSubscriptionRenewalV1{},
-		ChatMessageSentV1{},
-		KicksGifted{},
-		LiveStreamMetadataUpdatedV1{},
-		LiveStreamStatusUpdatedV1{},
-		ModerationBannedV1{},
+		&ChannelFollowedV1{},
+		&ChannelSubscriptionGiftsV1{},
+		&ChannelSubscriptionNewV1{},
+		&ChannelSubscriptionRenewalV1{},
+		&ChatMessageSentV1{},
+		&KicksGifted{},
+		&LiveStreamMetadataUpdatedV1{},
+		&LiveStreamStatusUpdatedV1{},
+		&ModerationBannedV1{},
 	}
 }
 
-func AbstractParse(eventType string, version int, data []byte) (Event, error) {
-	for _, evn := range All() {
-		if evn.TypeName() != eventType && evn.Version() != version {
+func AbstractParse(eventType string, version int, eventJSON []byte) (Event, error) {
+	if len(eventJSON) == 0 {
+		return nil, fmt.Errorf("empty event JSON for event type %q version %d", eventType, version)
+	}
+	for _, ev := range All() {
+		if ev.TypeName() != eventType || ev.Version() != version {
 			continue
 		}
-		err := json.Unmarshal(data, &evn)
+		err := json.Unmarshal(eventJSON, ev)
 		if err != nil {
-			return nil, err
+			return nil, fmt.Errorf("unable to unmarshal event %q of type %q and version %d: %w", eventJSON, eventType, version, err)
 		}
-		return evn, nil
+		return ev, nil
 	}
 	return nil, fmt.Errorf("unknown event type %q version %d", eventType, version)
 }

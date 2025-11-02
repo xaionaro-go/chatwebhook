@@ -24,7 +24,7 @@ func (LiveStreamMetadataUpdatedV1) TypeID() chatwebhook_grpc.PlatformEventType {
 	return chatwebhook_grpc.PlatformEventType_platformEventTypeStreamInfoUpdate
 }
 
-func (ev LiveStreamMetadataUpdatedV1) ToGRPC() []*chatwebhook_grpc.Event {
+func (ev *LiveStreamMetadataUpdatedV1) ToGRPC() []*chatwebhook_grpc.Event {
 	return []*chatwebhook_grpc.Event{{
 		Id:            randomEventID(),
 		EventType:     ev.TypeID(),

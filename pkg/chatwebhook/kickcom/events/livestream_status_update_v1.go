@@ -21,7 +21,7 @@ func (LiveStreamStatusUpdatedV1) TypeName() string {
 	return "livestream.status.updated"
 }
 
-func (ev LiveStreamStatusUpdatedV1) TypeID() chatwebhook_grpc.PlatformEventType {
+func (ev *LiveStreamStatusUpdatedV1) TypeID() chatwebhook_grpc.PlatformEventType {
 	if ev.IsLive {
 		return chatwebhook_grpc.PlatformEventType_platformEventTypeStreamOnline
 	}

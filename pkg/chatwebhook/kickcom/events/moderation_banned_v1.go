@@ -24,7 +24,7 @@ func (ModerationBannedV1) TypeID() chatwebhook_grpc.PlatformEventType {
 	return chatwebhook_grpc.PlatformEventType_platformEventTypeBan
 }
 
-func (ev ModerationBannedV1) ToGRPC() []*chatwebhook_grpc.Event {
+func (ev *ModerationBannedV1) ToGRPC() []*chatwebhook_grpc.Event {
 	return []*chatwebhook_grpc.Event{{
 		Id:            randomEventID(),
 		EventType:     ev.TypeID(),
