@@ -1,0 +1,85 @@
+syntax = "proto3";
+package chatwebhook;
+option go_package = "github.com/xaionaro-go/chatwebhook/pkg/grpc/protobuf/go/chatwebhook_grpc";
+
+service ChatWebHook {
+    rpc Subscribe(SubscribeRequest) returns (stream Event) {}
+}
+
+message SubscribeRequest {
+    PlatformID platformID = 1;
+    string channelID = 2;
+    string apiKey = 3;
+}
+
+enum PlatformID {
+    platformIDUndefined = 0;
+    platformIDKick = 1;
+}
+
+enum PlatformEventType {
+    platformEventTypeUndefined = 0;
+    platformEventTypeChatMessage = 1;
+    platformEventTypeCheer = 2;
+    platformEventTypeAdBreak = 4;
+    platformEventTypeFollow = 6;
+    platformEventTypeStreamOnline = 256;
+    platformEventTypeStreamOffline = 257;
+    platformEventTypeStreamInfoUpdate = 258;
+    platformEventTypeSubscriptionNew = 512;
+    platformEventTypeSubscriptionRenewed = 513;
+    platformEventTypeGiftedSubscription = 514;
+    platformEventTypeRaid = 768;
+    platformEventTypeChannelShoutoutReceive = 769;
+    platformEventTypeBan = 1024;
+    platformEventTypeAutoModHold = 1025;
+    platformEventTypeOther = 65535;
+}
+
+message User {
+    string id = 1;
+    string slug = 2;
+    string name = 3;
+    optional string nameReadable = 4;
+}
+
+enum Currency {
+    CURRENCY_UNDEFINED = 0;
+    CURRENCY_USD = 1;
+    CURRENCY_EUR = 2;
+    CURRENCY_GBP = 3;
+    CURRENCY_JPY = 4;
+    CURRENCY_OTHER = 65535;
+}
+
+message Money {
+    Currency currency = 1;
+    double amount = 2;
+}
+
+message Message {
+    string content = 1;
+    TextFormatType formatType = 2;
+    optional string inReplyTo = 3;
+}
+
+message Event {
+    string id = 1;
+	uint64 createdAtUNIXNano  = 2;
+    optional uint64 expiresAtUNIXNano  = 3;
+    PlatformEventType eventType = 4;
+    User user = 5;
+    optional User targetUser = 6;
+    optional User targetChannel = 7;
+    optional Message message = 8;
+    optional Money money = 9;
+    optional string tier = 10;
+}
+
+enum TextFormatType {
+    TEXT_FORMAT_TYPE_UNDEFINED = 0;
+    TEXT_FORMAT_TYPE_PLAIN = 1;
+    TEXT_FORMAT_TYPE_MARKDOWN = 2;
+    TEXT_FORMAT_TYPE_HTML = 3;
+}
+
