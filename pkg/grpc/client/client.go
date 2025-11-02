@@ -15,6 +15,10 @@ import (
 	"google.golang.org/grpc/status"
 )
 
+const (
+	DefaultServerAddress = "home.dx.center:4531"
+)
+
 type Client struct {
 	Target string
 }
