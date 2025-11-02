@@ -19,7 +19,6 @@ type Client struct {
 func New(
 	ctx context.Context,
 	target string,
-	channelSlug string,
 ) (*Client, error) {
 	c := &Client{
 		Target: target,
@@ -55,6 +54,7 @@ func (c *Client) GetMessagesChan(
 	ctx context.Context,
 	platformID chatwebhook_grpc.PlatformID,
 	channelID string,
+	apiKey string,
 ) (<-chan *chatwebhook_grpc.Event, error) {
 	return xgrpc.UnwrapChan(ctx, c,
 		func(
@@ -66,6 +66,7 @@ func (c *Client) GetMessagesChan(
 				&chatwebhook_grpc.SubscribeRequest{
 					PlatformID: platformID,
 					ChannelID:  channelID,
+					ApiKey:     apiKey,
 				},
 			)
 		},

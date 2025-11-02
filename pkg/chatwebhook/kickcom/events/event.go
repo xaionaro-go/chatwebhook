@@ -19,8 +19,8 @@ type Event interface {
 	ToGRPC() []*chatwebhook_grpc.Event
 }
 
-func AbstractParse(eventType string, version int, data []byte) (Event, error) {
-	for _, evn := range []Event{
+func All() []Event {
+	return []Event{
 		ChannelFollowedV1{},
 		ChannelSubscriptionGiftsV1{},
 		ChannelSubscriptionNewV1{},
@@ -30,7 +30,11 @@ func AbstractParse(eventType string, version int, data []byte) (Event, error) {
 		LiveStreamMetadataUpdatedV1{},
 		LiveStreamStatusUpdatedV1{},
 		ModerationBannedV1{},
-	} {
+	}
+}
+
+func AbstractParse(eventType string, version int, data []byte) (Event, error) {
+	for _, evn := range All() {
 		if evn.TypeName() != eventType && evn.Version() != version {
 			continue
 		}

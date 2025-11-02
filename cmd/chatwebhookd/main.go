@@ -56,7 +56,7 @@ func main() {
 	keyPath := flag.String("key", "/etc/chatwebhook/server.key", "Path to TLS key")
 	cacheDirFlag := flag.String("cache-dir", "~/.local/cache/chatwebhook", "Path to cache directory")
 	flag.Parse()
-	l := zap.Default()
+	l := zap.Default().WithLevel(loggerLevel)
 	ctx := context.Background()
 	ctx = logger.CtxWithLogger(ctx, l)
 	logger.Default = func() logger.Logger {
