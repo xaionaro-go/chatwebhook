@@ -6,7 +6,7 @@ require (
 	github.com/facebookincubator/go-belt v0.0.0-20250308011339-62fb7027b11f
 	github.com/stretchr/testify v1.11.1
 	github.com/xaionaro-go/eventbus v0.0.0-20250720144534-4670758005d9
-	github.com/xaionaro-go/observability v0.0.0-20250622130956-24b7017284e4
+	github.com/xaionaro-go/observability v0.0.0-20251102143534-3aeb2a25e57d
 	github.com/xaionaro-go/secret v0.0.0-20250111141743-ced12e1082c2
 	github.com/xaionaro-go/xpath v0.0.0-20250111145115-55f5728f643f
 	github.com/xaionaro-go/xsync v0.0.0-20250111141039-3e7f31b1a2c6
@@ -42,6 +42,7 @@ require (
 	github.com/xaionaro-go/spinlock v0.0.0-20200518175509-30e6d1ce68a1 // indirect
 	github.com/xaionaro-go/unsafetools v0.0.0-20241024014258-a46e1ce3763e // indirect
 	github.com/xaionaro-go/xcontext v0.0.0-20250111150717-e70e1f5b299c // indirect
+	github.com/xaionaro-go/xgrpc v0.0.0-20251102160837-04b13583739a
 	go.uber.org/multierr v1.10.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	golang.org/x/exp v0.0.0-20240823005443-9b4947da3948 // indirect

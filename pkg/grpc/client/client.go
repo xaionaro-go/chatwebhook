@@ -4,12 +4,15 @@ import (
 	"context"
 	"fmt"
 	"io"
+	"time"
 
 	"github.com/facebookincubator/go-belt/tool/logger"
 	"github.com/xaionaro-go/chatwebhook/pkg/grpc/protobuf/go/chatwebhook_grpc"
-	"github.com/xaionaro-go/chatwebhook/pkg/xgrpc"
+	"github.com/xaionaro-go/xgrpc"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
+	"google.golang.org/grpc/status"
 )
 
 type Client struct {
@@ -28,7 +31,9 @@ func New(
 
 func (c *Client) GRPCClient(
 	ctx context.Context,
-) (chatwebhook_grpc.ChatWebHookClient, io.Closer, error) {
+) (_ret0 chatwebhook_grpc.ChatWebHookClient, _ret1 io.Closer, _err error) {
+	logger.Tracef(ctx, "GRPCClient")
+	defer func() { logger.Tracef(ctx, "/GRPCClient: %v", _err) }()
 	conn, err := grpc.NewClient(
 		c.Target,
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
@@ -42,6 +47,16 @@ func (c *Client) GRPCClient(
 }
 
 func (c *Client) ProcessError(ctx context.Context, err error) error {
+	logger.Tracef(ctx, "processError(ctx, '%v'): %T", err, err)
+	if s, ok := status.FromError(err); ok {
+		logger.Tracef(ctx, "processError(ctx, '%v'): code == %#+v; msg == %#+v", err, s.Code(), s.Message())
+		switch s.Code() {
+		case codes.Unavailable:
+			logger.Debugf(ctx, "suppressed the error (forcing a retry in a second)")
+			time.Sleep(time.Second)
+			return nil
+		}
+	}
 	logger.Errorf(ctx, "gRPC call error: %v", err)
 	return err
 }

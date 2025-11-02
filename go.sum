@@ -58,8 +58,8 @@ github.com/xaionaro-go/logrustash v0.0.0-20240804141650-d48034780a5f h1:mMrVrYtH
 github.com/xaionaro-go/logrustash v0.0.0-20240804141650-d48034780a5f/go.mod h1:aszOZHoPPSgKwdbJUgonps3MSODqctkNhwQDDwlw0Eg=
 github.com/xaionaro-go/object v0.0.0-20241026212449-753ce10ec94c h1:2CIIxTRox9auImHyfbfrqSyrvPaWrw5w2Yw5TkOioZw=
 github.com/xaionaro-go/object v0.0.0-20241026212449-753ce10ec94c/go.mod h1:vRcA12NWsR0IrS75eqnPBs5aVfCYmJy4bR+6DbJpBCg=
-github.com/xaionaro-go/observability v0.0.0-20250622130956-24b7017284e4 h1:dlsJ1l9WI+LTpB5z4f7FCLLrxJ7uV4tj9jWNqpibhA0=
-github.com/xaionaro-go/observability v0.0.0-20250622130956-24b7017284e4/go.mod h1:GkNC0+nPJMOzotTzJVlH4+DvDg9cKrV9qqOe+8/kVw4=
+github.com/xaionaro-go/observability v0.0.0-20251102143534-3aeb2a25e57d h1:3oelsD973xao6Y1ucukBXElEfoSoEJ6naArGf7OQKTU=
+github.com/xaionaro-go/observability v0.0.0-20251102143534-3aeb2a25e57d/go.mod h1:83Ywq4Ukg4EtS3+1HvaboKpt6sqZzwv7oZ5+jLkzSNc=
 github.com/xaionaro-go/secret v0.0.0-20250111141743-ced12e1082c2 h1:QHpTWfyfmz65cE0MtFXe9fScdi+X0VIYR2wgolSYEUk=
 github.com/xaionaro-go/secret v0.0.0-20250111141743-ced12e1082c2/go.mod h1:XKoHGZ4VKMbVBl8VotLIoWQdrB6Q7jnR++RbkiegZFU=
 github.com/xaionaro-go/spinlock v0.0.0-20190309154744-55278e21e817/go.mod h1:Nb/15eS0BMty6TMuWgRQM8WCDIUlyPZagcpchHT6c9Y=
@@ -69,6 +69,12 @@ github.com/xaionaro-go/unsafetools v0.0.0-20241024014258-a46e1ce3763e h1:FV+/FVP
 github.com/xaionaro-go/unsafetools v0.0.0-20241024014258-a46e1ce3763e/go.mod h1:ERewyGVM0zYnWA9nxdHPIC3xc9Yrf5CgAnBITuP3FRE=
 github.com/xaionaro-go/xcontext v0.0.0-20250111150717-e70e1f5b299c h1://sE/WLpO7wpcVsp1FfTNAG9JmL60KfXiogNVKYivTA=
 github.com/xaionaro-go/xcontext v0.0.0-20250111150717-e70e1f5b299c/go.mod h1:MGRT1+2m2adVRc4aAn0RVGysjsSRKN9VCyBJLHvQd4k=
+github.com/xaionaro-go/xgrpc v0.0.0-20251102160501-546e08422543 h1:qYw0RzpXXGuRl9t62phFg3gZuOXZU7X4B/vuY9TslDs=
+github.com/xaionaro-go/xgrpc v0.0.0-20251102160501-546e08422543/go.mod h1:9mSKZHC8O/CxLVq8bjrUz1ZavPFhn5bGxr60do2hL6g=
+github.com/xaionaro-go/xgrpc v0.0.0-20251102160643-66193f1d6d76 h1:+Eq0FKpjffHVzGpXnCoZ4rhX54714n7MTLC8sSlH5Bg=
+github.com/xaionaro-go/xgrpc v0.0.0-20251102160643-66193f1d6d76/go.mod h1:9mSKZHC8O/CxLVq8bjrUz1ZavPFhn5bGxr60do2hL6g=
+github.com/xaionaro-go/xgrpc v0.0.0-20251102160837-04b13583739a h1:rjI5y2zUNQ4Cpxg+DcxCa/RCQgIIw5cHjJGKMtsmH8U=
+github.com/xaionaro-go/xgrpc v0.0.0-20251102160837-04b13583739a/go.mod h1:9mSKZHC8O/CxLVq8bjrUz1ZavPFhn5bGxr60do2hL6g=
 github.com/xaionaro-go/xpath v0.0.0-20250111145115-55f5728f643f h1:ofxY1akRlVdJ/AEDj0EakK4Aez8fzeWTTe2mCAZiJ0A=
 github.com/xaionaro-go/xpath v0.0.0-20250111145115-55f5728f643f/go.mod h1:f0DVcqddOy1RALOgXJHwpQnkp1u1yeBX/+A2+Bf4EGc=
 github.com/xaionaro-go/xsync v0.0.0-20250111141039-3e7f31b1a2c6 h1:ROtz45GepYXGa3EK3bImlfdvZKdAr5LEBgZAW7dKRsg=
@@ -97,8 +103,8 @@ golang.org/x/exp v0.0.0-20240823005443-9b4947da3948 h1:kx6Ds3MlpiUHKj7syVnbp57++
 golang.org/x/exp v0.0.0-20240823005443-9b4947da3948/go.mod h1:akd2r19cwCdwSwWeIdzYQGa/EZZyqcOdwWiwj5L5eKQ=
 golang.org/x/net v0.42.0 h1:jzkYrhi3YQWD6MLBJcsklgQsoAcw89EcZbJw8Z614hs=
 golang.org/x/net v0.42.0/go.mod h1:FF1RA5d3u7nAYA4z2TkclSCKh68eSXtiFwcWQpPXdt8=
-golang.org/x/oauth2 v0.30.0 h1:dnDm7JmhM45NNpd8FDDeLhK6FwqbOf4MLCM9zb1BOHI=
-golang.org/x/oauth2 v0.30.0/go.mod h1:B++QgG3ZKulg6sRPGD/mqlHQs5rB3Ml9erfeDY7xKlU=
+golang.org/x/oauth2 v0.32.0 h1:jsCblLleRMDrxMN29H3z/k1KliIvpLgCkE6R8FXXNgY=
+golang.org/x/oauth2 v0.32.0/go.mod h1:lzm5WQJQwKZ3nwavOZ3IS5Aulzxi68dUSgRHujetwEA=
 golang.org/x/sys v0.0.0-20200107162124-548cf772de50/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20220715151400-c0bba94af5f8/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
 golang.org/x/sys v0.5.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
